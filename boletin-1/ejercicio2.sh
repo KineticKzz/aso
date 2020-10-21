@@ -1,4 +1,12 @@
 #!/bin/bash
+if [ $# -eq 1 ]
+then 
+	continue
+else
+	echo "Introduce un parámetro"
+	sleep 3
+	exit 1
+fi
 
 usuario=$1
 

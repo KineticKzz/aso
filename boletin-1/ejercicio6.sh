@@ -10,4 +10,4 @@ else
 fi
 
 
-dialog --infobox $(hostname -I|cut -d" " -f1)
+dialog --infobox "Tu ip es: "$(hostname -I|cut -d" " -f1) 0 0
