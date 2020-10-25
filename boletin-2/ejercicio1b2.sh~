@@ -19,7 +19,7 @@ dialog --nocancel --menu "NOMBRE" 0 0 5 \
 5 "Crear usuario" \
 6 "Borrar usuario" \
 7 "Salir" 2>fich
-opcion=$(cat fich)
+opcion=`cat fich`
 rm -r fich
 #echo "MENÚ PRINCIPAL"
 #echo "1.- Listar archivos"

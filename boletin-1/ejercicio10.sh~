@@ -22,7 +22,7 @@ else
 fi
 
 dir_backup=/tmp/copia/$(hostname)_$(date +%y-%m-%d).tar.gz
-dir_origen="/home /root"
+dir_origen="/home/pc207/aso /root"
 
 if [ -d /tmp/copia ]
 then

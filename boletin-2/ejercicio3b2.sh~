@@ -24,15 +24,20 @@ comprobacionParametros $#
 opcion=$1
 dni=$2
 
-emp=grep -w $dni empleados
-numero=cut -d: -f1
-nombre=cut -d: -f2
-apel=cut -d: -f3
-puesto=cut -d: -f5
-suelmen=cut -d: -f6
+emp=$(cat empleados|grep -i $dni)
+numero=$(echo $emp|cut -d: -f1)
+nombre=$(echo $emp|cut -d: -f2)
+apel=$(echo $emp|cut -d: -f3)
+puesto=$(echo $emp|cut -d: -f6)
+suelmen=$(echo $emp|cut -d":" -f5)
+suelex=$(cat pagas_extras|grep -i $puesto|cut -d: -f2)
+x=$suelmen*12
+y=$suelex*2
+suelan=$suelmen*12+$suelex*2
 
 case $1 in 
-m) 	echo "DATOS DEL EMPLEADO"
+-m) clear
+	echo "DATOS DEL EMPLEADO"
 	echo "_______________________"
 	echo ""
 	echo "Nº Empleado: $numero"
@@ -40,11 +45,12 @@ m) 	echo "DATOS DEL EMPLEADO"
 	echo "Apellido: $apel"
 	echo "DNI: $dni"
 	echo "Puesto: $puesto"
-	echo "Sueldo mensual: $suelmen"
-	echo "_______________________"
+	echo "Sueldo mensual: $suelmen €"
+	echo "_______________________\n"
 ;;
 
-a)	echo "SUELDO ANUAL DEL EMPLEADO"
+-a)	clear
+	echo "SUELDO ANUAL DEL EMPLEADO"
 	echo "_______________________"
 	echo ""
 	echo "Nombre: $nombre"
@@ -52,7 +58,7 @@ a)	echo "SUELDO ANUAL DEL EMPLEADO"
 	echo "DNI: $dni"
 	echo "Sueldo mensual: $suelmen"
 	echo "Sueldo anual: $suelan"
-	echo "_______________________"
+	echo "_______________________\n"
 ;;
 
 *)	echo "Parámetro incorrecto, el priemr parámetro debe de ser 'm' o 'a'"
