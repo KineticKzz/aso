@@ -54,6 +54,10 @@ a)	echo "SUELDO ANUAL DEL EMPLEADO"
 	echo "Sueldo anual: $suelan"
 	echo "_______________________"
 ;;
+
+*)	echo "Parámetro incorrecto, el priemr parámetro debe de ser 'm' o 'a'"
+	exit 1;
+esac
 	
 	
 	

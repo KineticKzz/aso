@@ -31,9 +31,9 @@ apel=$(echo $emp|cut -d: -f3)
 puesto=$(echo $emp|cut -d: -f6)
 suelmen=$(echo $emp|cut -d":" -f5)
 suelex=$(cat pagas_extras|grep -i $puesto|cut -d: -f2)
-x=$suelmen*12
-y=$suelex*2
-suelan=$suelmen*12+$suelex*2
+x=$(expr $suelmen \* 12)
+y=$(expr $suelex \* 2)
+suelan=$(expr $x + $y)
 
 case $1 in 
 -m) clear
@@ -45,7 +45,7 @@ case $1 in
 	echo "Apellido: $apel"
 	echo "DNI: $dni"
 	echo "Puesto: $puesto"
-	echo "Sueldo mensual: $suelmen €"
+	echo "Sueldo mensual: $suelmen"
 	echo "_______________________\n"
 ;;
 
