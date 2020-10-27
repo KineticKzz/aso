@@ -39,9 +39,9 @@ funcionMenu
 echo "\n"
 sleep 1
 	case $opcion in 
-	1)clear; ls -la
+	1)clear; dialog --nocancel --msgbox "$(ls -la)" 0 0
 	;;
-	2)clear; pwd
+	2)clear; dialog --nocancel --msgbox "$(pwd)" 0 0
 	;;
 	3) dialog --nocancel --inputbox "Diga el nombre del directorio: " 0 0 2>dir1
 		directorioCrear=$(cat dir1)
@@ -57,17 +57,17 @@ sleep 1
 			then
 				rm -r $directorioBorrar
 			else
-			dialog --infobox "El directorio no está vacío" 0 0; sleep 2;clear
+			dialog --nocancel --msgbox "El directorio no está vacío" 0 0; sleep 2;clear
 			fi
 		else
-			dialog --infobox "El nombre no hace referencia a un directorio" 0 0
+			dialog --nocancel --msgbox "El nombre no hace referencia a un directorio" 0 0
 			sleep 2; clear; break
 		fi
 	;;
 	5)
 		if [ funcionComprobacionRoot -ne 0 ]
 		then
-			dialog --infobox "No eres el root" 0 0
+			dialog --nocancel --msgbox "No eres el root" 0 0
 			sleep 2
 		else
 			dialog --nocancel --inputbox "Diga el nombre del directorio: " 0 0 2>fich3
@@ -78,7 +78,7 @@ sleep 1
 	6)
 		if [ funcionComprobacionRoot -ne 0 ]
 		then
-			dialog --infobox "No eres el root" 0 0
+			dialog --nocancel --msgbox "No eres el root" 0 0
 			sleep 2
 		else
 			dialog --nocancel --inputbox "Diga el nombre del directorio: " 0 0 2>fich4
@@ -92,7 +92,6 @@ sleep 1
 	;;
 	esac
 	echo ""
-	read -p "Pulse intro para regresar al menú" aux; clear
 done
 
 
