@@ -12,7 +12,7 @@ funcionMenu(){
 #echo "1.- Listar Contactos"
 #echo "2.- Añadir un contacto"
 #echo "3.- Buscar un contacto"
-dialog --nocancel --menu "MENÚ CONTACTOS" 40 20 5 \
+dialog --nocancel --menu "MENÚ CONTACTOS" 40 40 5 \
 1 "Listar contactos" \
 2 "Añadir contacto" \
 3 "Buscar un contacto" \
@@ -57,14 +57,15 @@ do
 		ciudad=$(cat fich6)
 		rm -r fich6
 		
-		echo "$nombre:$telefono:$direccion:$ciudad" >>lista.txt
+		echo "$nombre:$direccion:$telefono:$ciudad" >>lista.txt
 	;;
 
 	3)	dialog --nocancel --inputbox "Introduzca el nombre: " 0 0 2>fich7
 		nombreBuscar=$(cat fich7)
 		rm -r fich7
 		
-		cat lista.txt|grep -w $nombreBuscar
+		busqueda=$(cat lista.txt|grep -i $nombreBuscar)
+		dialog --nocancel --msgbox "Contactos: $busqueda" 0 0
 	;;
 
 	4)	dialog --nocancel --inputbox "Introduzca el nombre de quien desea borrar: " 0 0 2>fich8
@@ -82,15 +83,21 @@ do
 				if [ $? -eq 0 ]
 				then
 					contactoAborrar=$(echo $i)
+					touch listaAux
 					
-					cat lista.txt|grep -v $contactoAborrar > lista.txt
-					
-
+					cat lista.txt|grep $contactoAborrar >> listaAux
 					dialog --nocancel --msgbox "Contacto borrado" 0 0
 				else
 					continue
 				fi
 			done
+			while read linea
+			do
+				nuevaLista=$(cat lista.txt|grep -v $linea)
+				echo "$nuevaLista" > lista.txt
+				sleep 2
+			done < listaAux
+			rm -r listaAux
 		else
 			dialog --nocancel --msgbox "No hay ningún usuario con este nombre" 0 0
 		fi
