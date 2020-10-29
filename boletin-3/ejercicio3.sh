@@ -10,27 +10,18 @@ if [ $(id -u) -ne 0 ] ; then
 else
 	continue
 fi;}
-funcionComprobacionParametros(){
-if [ $1 -eq 2 ] ; then
-	continue
-else
-	echo "El número de parámetros es incorrecto, tienen que ser x parámetros"
-	sleep 2;clear;exit 1
-fi;}
+funcionMenu(){
+echo "_____________________"
+echo ""
+echo "MENU INFORMACION RED"
+echo "_____________________"
+}
 
-comprobacionRoot
-comprobacionParametros $#
+funcionComprobacionRoot
+	
+wget -qO- ifconfig.co/ip
+	
+	
+	
+	
 
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
