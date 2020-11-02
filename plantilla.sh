@@ -18,8 +18,8 @@ else
 	sleep 2;clear;exit 1
 fi;}
 
-comprobacionRoot
-comprobacionParametros $#
+funcionComprobacionRoot
+funcionComprobacionParametros $#
 
 
 	

@@ -29,7 +29,7 @@ case $1 in
 ;;
 
 2)
-	dialog --nocancel --msgbox "Su ip pública es: `wget -qO- ifconfig.co/ip`" 0 0
+	dialog --nocancel --msgbox "Su ip pública es: `wget -qO- ifconfig.co/ip`"
 ;;
 
 *)
