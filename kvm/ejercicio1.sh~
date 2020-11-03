@@ -80,7 +80,7 @@ case $1 in
 
 
 4)
-	exit 0
+	funcionRedInterna
 ;;
 
 
@@ -162,26 +162,77 @@ esac
 }
 funcionAccionesMenuBridgeEstatico(){
 case $opcionMenuBridgeEstatico in
-a)echo "hola soy la opcion a"; sleep 1
-
+a)
+	dialog --nocancel --msgbox "Tu configuracion actual es: $(cat /etc/network/interfaces)" 0 0
 ;;
 
-b)echo "hola soy la opcion b"; sleep 1
-
+b)
+	dialog --nocancel --inputbox "Nombre de la red. Ej: br1, br2... : " 0 0 2>fich1
+	nombreRedEst=$(cat fich1); rm -f fich1
+	dialog --nocancel --inputbox "¿A que interfaz está enlazada? " 0 0 2>fich2
+	interfaz=$(cat fich2); rm -r fich2
+	dialog --nocancel --inputbox "Dirección ip: " 0 0 2>fich3
+	ipRedEst=$(cat fich3); rm -r fich3
+	dialog --nocancel --inputbox "Máscara: " 0 0 2>fich4
+	maskRedEst=$(cat fich4); rm -r fich4
+	dialog --nocancel --inputbox "Puerta de enlace: " 0 0 2>fich5
+	gateRedEst=$(cat fich5); rm -r fich5
+	dialog --nocancel --inputbox "Red: " 0 0 2>fich6
+	netRedEst=$(cat fich6); rm -r fich6
+	dialog --nocancel --inputbox "Broadcast: " 0 0 2>fich7
+	broadRedEst=$(cat fich7); rm -r fich7
+	
+	fecha=$(date +%d-%m-%Y)
+	cp /etc/network/interfaces /etc/network/interfaces_COPIA_$fecha
+	dialog --infobox "Realizando una copia de seguridad del fichero interfaces en /etc/network/..." 0 0;sleep 3
+	
+	echo "#Fichero de configuracion con el adaptador puente para KVM" > /etc/network/interfaces
+	echo "auto lo" >> /etc/network/interfaces
+	echo "iface lo inet loopback" >> /etc/network/interfaces
+	echo "" >> /etc/network/interfaces
+	echo "auto $interfaz" >> /etc/network/interfaces
+	echo "iface $interfaz inet manual" >> /etc/network/interfaces
+	echo "" >> /etc/network/interfaces
+	echo "auto $nombreRedEst" >> /etc/network/interfaces
+	echo "iface $nombreRedEst inet static" >> /etc/network/interfaces
+	echo "bridge_ports $interfaz" >> /etc/network/interfaces
+	echo "bridge_stf off" >> /etc/network/interfaces
+	echo "address $ipRedEst" >> /etc/network/interfaces
+	echo "netmask $maskRedEst" >> /etc/network/interfaces
+	echo "gateway $gateRedEst" >> /etc/network/interfaces
+	echo "network $netRedEst" >> /etc/network/interfaces
+	echo "broadcast $broadRedEst" >> /etc/network/interfaces
+	dialog --infobox "Configuración realizada con éxito" 0 0;sleep 3
+	ip a flush dev $interfaz 2>/dev/null
+	ip a flush dev $nombreRedEst 2>/dev/null
+	systemctl restart networking
+	dialog --infobox "Limpiando configuracion interfaces y reiniciando el servicio" 0 0;sleep 3
+	dialog --nocancel --msgbox "Ha finalizado la configuracion, si no tiene internet deberá reiniciar el sistema para que los cambios se apliquen correctamente" 0 0
 ;;
 
 
-c)echo "hola soy la opcion c"; sleep 1
-
+c)
+	dialog --nocancel --inputbox "Introduzca el bridge: " 0 0 2>fich9
+	bridge=$(cat fich9); rm -f fich9
+	dialog --nocancel --inputbox "¿A que interfaz está enlazada? " 0 0 2>fich8
+	interfaz=$(cat fich8); rm -f fich8
+	macInt=$(ip a show $interfaz|grep -w "link/ether"|cut -d" " -f6)
+	macBridge=$(ip a show $bridge|grep -w "link/ether"|cut -d" " -f6)
+	if [ $macInt = $macBridge ]
+	then
+		dialog --nocancel --msgbox "Están enlazados" 0 0
+	else
+		dialog --nocancel --msgbox "No están enlazados" 0 0
+	fi
 ;;
 
 
-d)echo "hola soy la opcion d"; sleep 1
-
+d)
+	nano /etc/network/interfaces
 ;;
 
 
-e)
+f)
 	continue;;
 esac
 }
@@ -191,28 +242,65 @@ a)echo "hola soy la opcion a"; sleep 1
 
 ;;
 
-b)echo "hola soy la opcion b"; sleep 1
-
+b)
+	dialog --nocancel --inputbox "Nombre de la red. Ej: br1, br2... : " 0 0 2>fich1
+	nombreRedDin=$(cat fich1); rm -f fich1
+	dialog --nocancel --inputbox "¿A que interfaz está enlazada? " 0 0 2>fich2
+	interfaz=$(cat fich2); rm -r fich2
+	
+	fecha=$(date +%d-%m-%Y)
+	cp /etc/network/interfaces /etc/network/interfaces_COPIA_$fecha
+	dialog --infobox "Realizando una copia de seguridad del fichero interfaces en /etc/network/..." 0 0;sleep 3
+	
+	echo "#Fichero de configuracion con el adaptador puente para KVM" > /etc/network/interfaces
+	echo "auto lo" >> /etc/network/interfaces
+	echo "iface lo inet loopback" >> /etc/network/interfaces
+	echo "" >> /etc/network/interfaces
+	echo "auto $interfaz" >> /etc/network/interfaces
+	echo "iface $interfaz inet manual" >> /etc/network/interfaces
+	echo "" >> /etc/network/interfaces
+	echo "auto $nombreRedEst" >> /etc/network/interfaces
+	echo "iface $nombreRedEst inet dhcp" >> /etc/network/interfaces
+	echo "bridge_ports $interfaz" >> /etc/network/interfaces
+	echo "bridge_stf off" >> /etc/network/interfaces
+	
+	dialog --infobox "Configuración realizada con éxito" 0 0;sleep 3
+	ip a flush dev $interfaz 2>/dev/null
+	ip a flush dev $nombreRedDin 2>/dev/null
+	systemctl restart networking
+	dialog --infobox "Limpiando configuracion interfaces y reiniciando el servicio" 0 0;sleep 3
+	dialog --nocancel --msgbox "Ha finalizado la configuracion, si no tiene internet deberá reiniciar el sistema para que los cambios se apliquen correctamente" 0 0
 ;;
 
 
-c)echo "hola soy la opcion c"; sleep 1
-
+c)
+	dialog --nocancel --inputbox "Introduzca el bridge: " 0 0 2>fich9
+	bridge=$(cat fich9); rm -f fich9
+	dialog --nocancel --inputbox "¿A que interfaz está enlazada? " 0 0 2>fich8
+	interfaz=$(cat fich8); rm -f fich8
+	macInt=$(ip a show $interfaz|grep -w "link/ether"|cut -d" " -f6)
+	macBridge=$(ip a show $bridge|grep -w "link/ether"|cut -d" " -f6)
+	if [ $macInt = $macBridge ]
+	then
+		dialog --nocancel --msgbox "Están enlazados" 0 0
+	else
+		dialog --nocancel --msgbox "No están enlazados" 0 0
+	fi
 ;;
 
-
-d)echo "hola soy la opcion d"; sleep 1
-
-;;
-
-
-e)
-	echo "hola soy la opcion e"; sleep 1
-;;
 
 f)
 	continue;;
 esac
+}
+funcionRedInterna(){
+dialog --nocancel --inputbox "Nombre de la red interna: " 0 0 2>fich
+nombreInterna=$(cat fich); rm -f fich
+apt install uuidgen 2>/dev/null
+uuidNueva="  <uuid>$(uuidgen)</uuid>"
+uuidActual=$(grep -w uuid /etc/libvirt/qemu/networks/default.xml)
+sed 's/"$uuidActual"/hola/' /etc/libvirt/qemu/networks/default.xml > prueba.xml
+sleep 3;exit
 }
 
 
@@ -227,15 +315,7 @@ do
 	funcionMenuPrincipal
 	funcionAccionesMenuPrincipal $opcionMenuPrincipal
 done
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
