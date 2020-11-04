@@ -1,36 +1,12 @@
 #/bin/bash
 #Autor: Sergio Lagüens Tornero
-#Fecha: 23/10/2020
-#Descripción: Esta es la plantilla para cualquier script
+#Fecha: 04/11/2020
+#Descripción: Ejercicio sobre phpmyadmin, mysql
 
-funcionComprobacionRoot(){
-if [ $(id -u) -ne 0 ] ; then
-	clear "No eres el root"
-	sleep 2;clear;exit 1
-else
-	continue
-fi;}
-funcionComprobacionParametros(){
-if [ $1 -eq 2 ] ; then
-	continue
-else
-	echo "El número de parámetros es incorrecto, tienen que ser x parámetros"
-	sleep 2;clear;exit 1
-fi;}
-
-comprobacionRoot
-comprobacionParametros $#
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+dbname="alumnos"
+ruta="/home/pc207"
+fecha=$(date +%Y-%m-%d)
+respaldo=$dbname-$fecha.sql
+mysqldump --opt --user=root password=peque $dbname > $ruta/$respaldo
+gzip $ruta/$respaldo
+find $ruta/*.sql.gz -mtime +30 -exec rm{} \;

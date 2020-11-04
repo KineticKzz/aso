@@ -25,13 +25,38 @@ rm -r fich1
 funcionAccionesMenu(){
 case $1 in
 1)
-	dialog --nocancel --msgbox "La ip privada de su interfaz $infz es: `ip a|grep -w $infz|grep -w inet|cut -d" " -f6|cut -d/ -f1`" 0 0
+	dialog --nocancel --msgbox "La ip privada de su interfaz $infz es: `ip a show $infz|grep -w inet|cut -d" " -f6|cut -d/ -f1`" 0 0
 ;;
+
 
 2)
-	dialog --nocancel --msgbox "Su ip pública es: `wget -qO- ifconfig.co/ip`" 0 0
+	dialog --nocancel --msgbox "Su ip pública es: $(wget -qO- ifconfig.co/ip)" 0 0
 ;;
 
+
+3)
+	dialog --nocancel --msgbox "La MAC de su tarjeta es: $(ip a show $infz|grep -w link/ether|cut -d" " -f6)" 0 0
+;;
+
+
+4)
+	dialog --nocancel --msgbox "Sus DNS son: $(cat /etc/resolv.conf|grep -w nameserver|cut -d" " -f2)" 0 0
+;;
+
+
+5)
+	dialog --nocancel --msgbox "Puerta de enlace: $(ip r|grep -i default|cut -d" " -f3)" 0 0
+;;
+
+
+6)
+	dialog --nocancel --msgbox "El nombre del equipo es: $(hostname)" 0 0
+;;
+
+
+7)
+	dialog --infobox "Hasta luego!" 0 0;sleep 3;clear;exit
+;;
 *)
 clear; exit
 ;;
@@ -54,11 +79,9 @@ fi
 
 
 opcion=0
-while [ $opcion -lt 5 ]
+while [ $opcion -lt 8 ]
 do
 	funcionMenu
-	sleep 1
 	funcionAccionesMenu $opcion
 done
-#wget -qO- ifconfig.co/ip
 	

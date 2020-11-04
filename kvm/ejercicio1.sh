@@ -299,7 +299,7 @@ nombreInterna=$(cat fich); rm -f fich
 apt install uuidgen 2>/dev/null
 uuidNueva="  <uuid>$(uuidgen)</uuid>"
 uuidActual=$(grep -w uuid /etc/libvirt/qemu/networks/default.xml)
-sed 's/"$uuidActual"/"$uuidNueva"/' /etc/libvirt/qemu/networks/default.xml > prueba.xml
+sed "s/${uuidActual}/${uuidNueva}/g" /etc/libvirt/qemu/networks/default.xml > prueba.xml
 sleep 3;exit
 }
 
