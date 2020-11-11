@@ -13,21 +13,17 @@ fi;}
 
 funcionComprobacionRoot
 
+if [ ! -d /var/practicas ]
+then
+	mkdir /var/practicas
+fi
+	
 find /home/*/practica-* > aux
-for i in aux
+for i in $(cat aux)
 do
-	usuario=$(cut -d"/" -f2)
-	echo $usuario
+	usuario=$(echo $i|cut -d"/" -f3)
+	practica=$(echo $i|cut -d"/" -f4) 
+	archivo=/var/practicas/$usuario-$practica
+	cp $i $archivo
 done
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
